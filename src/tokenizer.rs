@@ -37,7 +37,7 @@ pub fn tokenize(file_text: String) -> Vec<Token> {
             '"' => {
                 quotes_open = !quotes_open;
                 if !quotes_open {
-                    tokens.push(Token::Text(stack.clone()));
+                    tokens.push(Token::Str(stack.clone()));
                     stack.clear();
                 }
                 Token::QuotationMark
@@ -57,7 +57,7 @@ pub fn tokenize(file_text: String) -> Vec<Token> {
         .into_iter()
         .map(|token| match token {
             Token::Identifier(value) => match value.parse::<i32>() {
-                Ok(num) => Token::Number(num),
+                Ok(num) => Token::Num(num),
                 Err(_) => Token::Identifier(value),
             },
             _ => token,
@@ -65,13 +65,13 @@ pub fn tokenize(file_text: String) -> Vec<Token> {
         .collect();
     tokens
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Token {
     Let,
     Loop,
     Identifier(String),
-    Number(i32),
-    Text(String),
+    Num(i32),
+    Str(String),
     Equals,
     OpenParenthesis,
     CloseParenthesis,
