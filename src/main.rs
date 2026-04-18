@@ -1,5 +1,6 @@
 use crate::tokenizer::generate_tree;
 mod args;
+mod parser;
 mod tokenizer;
 
 fn main() -> Result<(), lexopt::Error> {
