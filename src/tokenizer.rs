@@ -65,7 +65,6 @@ pub fn tokenize(file_text: String) -> Vec<Token> {
         .collect();
     tokens
 }
-
 #[derive(Debug)]
 pub enum Token {
     Let,
@@ -81,4 +80,14 @@ pub enum Token {
     OpenBracket,
     CloseBracket,
     QuotationMark,
+}
+
+pub fn generate_tree(tokens: Vec<Token>) {
+    println!("Generating tree below...");
+    for (i, token) in tokens.iter().enumerate() {
+        println!("{} {:?}", "-".repeat(i + 1), token);
+    }
+    println!(
+        "Tree generated! Visit https://vgarciasc.github.io/tree-renderer/ and paste it to view it."
+    )
 }
