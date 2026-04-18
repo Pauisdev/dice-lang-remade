@@ -18,19 +18,30 @@ fn main() {
     let mut stack = String::new();
     let mut tokens = vec![];
     let mut quotes_open = false;
-    for char in file_text.chars() {
+    for i in 0..file_text.len() - 1 {
+        let bytes = file_text.as_bytes();
+        let char = bytes[i] as char;
+        let next_char = if i + 1 > file_text.len() - 1 {
+            None
+        } else {
+            let char = bytes[i + 1] as char;
+            Some(char)
+        };
         if char == ' ' && !quotes_open {
             continue;
         }
-        let token = match stack.as_str() {
-            "let" => Some(Token::Let),
-            "loop" => Some(Token::Loop),
-            _ => None,
-        };
-        if let Some(token) = token {
-            tokens.push(token);
-            stack.clear();
+        if next_char.is_none() || next_char.unwrap() == ' ' {
+            let token = match stack.as_str() {
+                "let" => Some(Token::Let),
+                "loop" => Some(Token::Loop),
+                _ => None,
+            };
+            if let Some(token) = token {
+                tokens.push(token);
+                stack.clear();
+            }
         }
+
         let token = match char {
             '=' => Token::Equals,
             ';' => Token::Semicolon,
