@@ -19,15 +19,15 @@ fn main() {
 }
 
 enum Token {
-    LET,
-    TEXT,
-    EQUALS,
-    OPEN_PARENTHESIS,
-    CLOSE_PARENTHESIS,
-    SEMICOLON,
-    PLUS,
-    OPEN_BRACKET,
-    CLOSE_BACKET,
+    Let,
+    Text,
+    Equals,
+    OpenParenthesis,
+    CloseParenthesis,
+    Semicolon,
+    Plus,
+    OpenBracket,
+    CloseBracket,
 }
 
 struct Root {
