@@ -17,3 +17,19 @@ fn main() {
         println!("{}", char);
     }
 }
+
+enum Token {
+    LET,
+    TEXT,
+    EQUALS,
+    OPEN_PARENTHESIS,
+    CLOSE_PARENTHESIS,
+    SEMICOLON,
+    PLUS,
+    OPEN_BRACKET,
+    CLOSE_BACKET,
+}
+
+struct Root {
+    tokens: Vec<Token>,
+}
