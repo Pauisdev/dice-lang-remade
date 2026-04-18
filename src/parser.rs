@@ -21,4 +21,12 @@ enum Node {
     DefineVariable { name: String, value: ValueType },
 }
 
-pub fn parse(tokens: Vec<Token>) -> Root {}
+pub fn parse(tokens: Vec<Token>) -> Root {
+    let mut root = Root { children: vec![] };
+    match tokens {
+        [Token::Let] => {}
+    }
+    root
+}
+
+fn read_till(start: usize, end: Token) {}
