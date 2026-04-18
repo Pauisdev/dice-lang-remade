@@ -40,7 +40,7 @@ pub fn tokenize(file_text: String) -> Vec<Token> {
                     tokens.push(Token::Str(stack.clone()));
                     stack.clear();
                 }
-                Token::QuotationMark
+                continue;
             }
             _ => {
                 stack.push(char);
@@ -79,7 +79,6 @@ pub enum Token {
     Plus,
     OpenBracket,
     CloseBracket,
-    QuotationMark,
 }
 
 pub fn generate_tree(tokens: Vec<Token>) {
