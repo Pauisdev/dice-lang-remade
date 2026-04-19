@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Let,
     Loop,
@@ -88,7 +88,8 @@ impl Tokenize for String {
     }
 }
 
-pub struct Tokens(Vec<Token>);
+#[derive(Clone)]
+pub struct Tokens(pub Vec<Token>);
 
 impl std::fmt::Display for Tokens {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

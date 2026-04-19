@@ -1,4 +1,4 @@
-use crate::tokenizer::Tokenize;
+use crate::{parser::Root, tokenizer::Tokenize};
 
 mod args;
 mod parser;
@@ -7,9 +7,12 @@ mod tokenizer;
 fn main() -> Result<(), lexopt::Error> {
     let mut args = args::parse_args()?;
     args.file_text.retain(|c| c != '\n');
-
     let tokens = args.file_text.tokenize();
-    //let nodes = parser::parse(tokens);
+
+    let root = Root {
+        children: tokens.clone().into(),
+    };
+    println!("{:#?}", root);
 
     if args.tree_view {
         println!("Generating tree below...");
