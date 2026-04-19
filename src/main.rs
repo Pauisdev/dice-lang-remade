@@ -14,13 +14,5 @@ fn main() -> Result<(), lexopt::Error> {
     };
     println!("{:#?}", root);
 
-    if args.tree_view {
-        println!("Generating tree below...");
-        println!("{}", tokens);
-        println!(
-            "Tree generated! Visit https://vgarciasc.github.io/tree-renderer/ and paste it to view it."
-        )
-    }
-
     Ok(())
 }

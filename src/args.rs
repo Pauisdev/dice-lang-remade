@@ -1,27 +1,59 @@
+use colored::Colorize;
 use std::fs;
 
 pub struct Args {
     pub file_text: String,
-    pub tree_view: bool,
 }
 
 pub fn parse_args() -> Result<Args, lexopt::Error> {
     use lexopt::prelude::*;
 
     let mut file_text = None;
-    let mut tree_view = false;
     let mut parser = lexopt::Parser::from_env();
     while let Some(arg) = parser.next()? {
         match arg {
-            Long("tree-view") => tree_view = true,
-            Value(val) if file_text.is_none() => {
-                file_text = match fs::read_to_string(val.string()?) {
+            Short('r') | Long("run") => {
+                file_text = match fs::read_to_string(parser.value()?.to_str().unwrap()) {
                     Ok(text) => Some(text),
                     Err(err) => panic!("Failed during file read: {}", err),
                 };
             }
-            Long("help") => {
-                println!("Usage: dice [--tree-view] file");
+            Short('h') | Long("help") => {
+                println!("{}", "🎲 Dice lang's compiler 🎲".green().bold());
+                println!(
+                    "{} {} {}",
+                    "Usage:".green().bold(),
+                    "dice".cyan().bold(),
+                    "[OPTIONS] [COMMAND]".blue()
+                );
+                println!();
+                println!("{}", "Options:".green().bold());
+                println!(
+                    "  {}, {}{: >29}",
+                    "-v".cyan().bold(),
+                    "--version".cyan().bold(),
+                    "Print current version"
+                );
+                println!(
+                    "  {}, {}{: >24}",
+                    "-h".cyan().bold(),
+                    "--help".cyan().bold(),
+                    "See this menu"
+                );
+                println!();
+                println!("{}", "Commands:".green().bold());
+                println!(
+                    "  {}, {}{: >27}",
+                    "build".cyan().bold(),
+                    "b".cyan().bold(),
+                    "Compile a file"
+                );
+                println!(
+                    "  {}, {}{: >25}",
+                    "run".cyan().bold(),
+                    "r".cyan().bold(),
+                    "Run a file"
+                );
                 std::process::exit(0);
             }
             _ => return Err(arg.unexpected()),
@@ -30,6 +62,5 @@ pub fn parse_args() -> Result<Args, lexopt::Error> {
 
     Ok(Args {
         file_text: file_text.ok_or("Missing file path")?,
-        tree_view,
     })
 }
