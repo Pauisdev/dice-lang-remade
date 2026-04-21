@@ -88,7 +88,7 @@ impl Tokenize for String {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Tokens(pub Vec<Token>);
 
 impl std::fmt::Display for Tokens {
