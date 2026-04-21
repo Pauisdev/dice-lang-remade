@@ -10,8 +10,16 @@ pub fn parse_args() -> Result<Args, lexopt::Error> {
 
     let mut file_text = None;
     let mut parser = lexopt::Parser::from_env();
+
+    let version = (String::from("v") + env!("CARGO_PKG_VERSION"))
+        .cyan()
+        .bold();
     while let Some(arg) = parser.next()? {
         match arg {
+            Short('v') | Long("version") => {
+                println!("Currently installed version of dice-lang: {}", version);
+                std::process::exit(0);
+            }
             Short('r') | Long("run") => {
                 file_text = match fs::read_to_string(parser.value()?.to_str().unwrap()) {
                     Ok(text) => Some(text),
