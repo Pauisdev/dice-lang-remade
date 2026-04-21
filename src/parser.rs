@@ -1,4 +1,8 @@
-use std::{iter::Peekable, vec::IntoIter};
+use std::{
+    iter::{Peekable, Skip},
+    slice::Iter,
+    vec::IntoIter,
+};
 
 use crate::tokenizer::{Token, Tokens};
 
@@ -78,8 +82,11 @@ impl Into<Vec<Node>> for Tokens {
                 }
                 Token::Loop => {
                     assert!(iter.next().unwrap() == Token::OpenBracket);
-                    let tokens = read_till(&mut iter, Token::CloseBracket);
-                    let children = tokens.into();
+                    let children = read_till(&mut iter, Token::CloseBracket)
+                        .0
+                        .split(|t| *t == Token::Semicolon)
+                        .map(|t| parse_line(t))
+                        .collect();
                     nodes.push(Node::Loop { children });
                 }
                 _ => {}
@@ -88,6 +95,43 @@ impl Into<Vec<Node>> for Tokens {
 
         nodes
     }
+}
+
+fn parse_line(tokens: &[Token]) -> Node {
+    let mut iter = tokens.iter();
+    loop {
+        let token = iter.next();
+        if token.is_none() {
+            break;
+        }
+        let token = token.unwrap();
+        if *token == Token::Let {
+            let identifier = iter.next().unwrap();
+            if let Token::Identifier(id) = identifier {
+                assert!(*iter.next().unwrap() == Token::Equals);
+                let assignment = iter.next().unwrap();
+                /*let b = match *iter.next().unwrap() {
+                    Token::Num(num) => Node::DefineVariable {
+                        name: id,
+                        value: ValueType::Num(num),
+                    },
+                    Token::Str(val) => Node::DefineVariable {
+                        name: id,
+                        value: ValueType::Str(val),
+                    },
+                    _ => panic!("Expected to find Num or Str following Equals"),
+                };*/
+            } else {
+                panic!("Expected to find Identifier following Let.")
+            }
+        }
+    }
+
+    Node::Loop { children: vec![] }
+}
+
+fn evaluate_assignment(tokens: Skip<Iter<Token>>) -> Node {
+    Node::Loop { children: vec![] }
 }
 
 fn read_till(from: &mut Peekable<IntoIter<Token>>, end: Token) -> Tokens {
