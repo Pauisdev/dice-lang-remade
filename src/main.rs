@@ -10,7 +10,7 @@ fn main() -> Result<(), lexopt::Error> {
     let tokens = args.file_text.tokenize();
 
     let root = Root {
-        children: tokens.clone().into(),
+        children: tokens.into(),
     };
     println!("{:#?}", root);
 
